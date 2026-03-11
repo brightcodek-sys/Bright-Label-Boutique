@@ -1,0 +1,137 @@
+/* --- BRIGHT LABEL BOUTIQUE: UNIVERSAL STYLES --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@600&display=swap');
+
+/* 1. RESET & VARIABLES */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --gold: #b08d57;
+    --dark: #1a1a1a;
+    --gray: #666666;
+    --light: #f9f9f9;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    color: var(--dark);
+    line-height: 1.6;
+    background-color: #fff;
+}
+
+/* 2. SHARED HEADERS (h1#A and p#B) */
+header {
+    text-align: center;
+    padding: 4rem 1rem 2rem;
+}
+
+h1#A {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8rem;
+    margin-bottom: 0.5rem;
+}
+
+p#B {
+    font-size: 0.8rem;
+    color: var(--gray);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+}
+
+/* 3. NAVIGATION */
+nav {
+    position: sticky;
+    top: 0;
+    background: white;
+    border-bottom: 1px solid #eee;
+    padding: 1rem 0;
+    z-index: 1000;
+}
+
+nav ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    gap: 2rem;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: var(--dark);
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+}
+
+nav ul li a.active {
+    color: var(--gold);
+}
+
+/* 4. MAIN LAYOUT & GRID */
+.page-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+/* 5. COMPONENTS & BUTTONS */
+.btn-primary, .submit-btn {
+    background: var(--dark);
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.btn-primary:hover {
+    background: var(--gold);
+}
+
+.form-group {
+    margin-bottom: 1.2rem;
+}
+
+input, textarea, select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    margin-top: 0.4rem;
+}
+
+/* 6. ADMIN-SPECIFIC GRID */
+.admin-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+}
+
+/* 7. ANIMATION */
+.fade-in {
+    animation: fadeIn 0.8s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* 8. MOBILE RESPONSIVENESS */
+@media (max-width: 768px) {
+    .admin-grid {
+        grid-template-columns: 1fr;
+    }
+}
