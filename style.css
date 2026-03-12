@@ -131,6 +131,66 @@ footer {
     color: var(--gray);
     font-size: 0.8rem;
 }
+/* --- CONTACT PAGE STYLES --- */
+.contact-section {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 4rem;
+    margin-top: 3rem;
+}
+
+.contact-info h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+}
+
+.info-item {
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+}
+
+.contact-form {
+    background: var(--off-white);
+    padding: 2.5rem;
+    border-radius: 4px;
+}
+
+.contact-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.contact-form label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.1em;
+}
+
+.contact-form input, 
+.contact-form textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.contact-form input:focus, 
+.contact-form textarea:focus {
+    border-color: var(--gold);
+}
+
+/* Mobile Fix for Contact Page */
+@media (max-width: 768px) {
+    .contact-section {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+}
 
 /* 8. RESPONSIVE */
 @media (max-width: 768px) {
