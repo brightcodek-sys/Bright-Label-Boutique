@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel | Bright Label Boutique</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1 id="A">Admin Panel</h1>
+        <p id="B">Manage Your Collection</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="admin.html" class="active">Admin</a></li>
+        </ul>
+    </nav>
+
+    <main class="container">
+        <section class="admin-section">
+            <div class="form-container">
+                <h3>Add New Product</h3>
+                <form id="productForm">
+                    <div class="form-group">
+                        <label for="p-name">Product Name</label>
+                        <input type="text" id="p-name" placeholder="e.g. Silk Vintage Shirt" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="p-price">Price (₦)</label>
+                        <input type="number" id="p-price" placeholder="e.g. 15000" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="p-category">Category</label>
+                        <input type="text" id="p-category" placeholder="e.g. Men, Women, Accessories" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="p-image">Product Image</label>
+                        <input type="file" id="p-image" accept="image/*" required>
+                        <div id="image-preview" style="margin-top: 10px; display: none;">
+                            <img id="preview-img" src="" alt="Preview" style="max-width: 100%; height: 150px; object-fit: cover; border: 1px solid #ddd;">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn">Upload to Shop</button>
+                </form>
+                <div id="status-msg"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Bright Label Boutique</p>
+    </footer>
+
+    <script type="module" src="admin.js"></script>
+</body>
+</html>
