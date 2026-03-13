@@ -255,3 +255,89 @@ footer {
         padding: 1.5rem;
     }
 }
+/* --- ADMIN PANEL ENHANCEMENTS --- */
+
+/* The main container for the admin form */
+.admin-section {
+    max-width: 600px;
+    margin: 4rem auto;
+    padding: 0 1rem;
+}
+
+.form-container {
+    background: #ffffff;
+    padding: 2.5rem;
+    border: 1px solid #e5e5e5;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); /* Soft shadow for a modern look */
+    border-radius: 4px;
+}
+
+.form-container h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    color: #1a1a1a;
+}
+
+/* Styling the inputs */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+    color: #555;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group input[type="file"] {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    font-family: inherit;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #b08d57; /* Gold focus color */
+}
+
+/* Image Preview Styling */
+#image-preview {
+    margin-top: 1.5rem;
+    padding: 10px;
+    border: 2px dashed #ddd; /* Dashed border for the upload area */
+    text-align: center;
+    background: #fafafa;
+}
+
+#preview-img {
+    max-width: 100%;
+    max-height: 250px;
+    display: block;
+    margin: 0 auto;
+    border-radius: 2px;
+}
+
+/* Status Messages */
+#status-msg {
+    margin-top: 1.5rem;
+    text-align: center;
+    font-size: 0.9rem;
+    min-height: 1.2rem;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 480px) {
+    .form-container {
+        padding: 1.5rem;
+    }
+}
