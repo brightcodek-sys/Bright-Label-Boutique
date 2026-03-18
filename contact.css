@@ -136,3 +136,9 @@ input:focus, textarea:focus {
         margin-top: 20px;
     }
 }
+.active {
+    color: #d4af37 !important; /* Gold color */
+    border-bottom: 2px solid #d4af37;
+    font-weight: bold;
+}
+
