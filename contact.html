@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | Bright Label Boutique</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">BRIGHT <span>LABEL</span></div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#shop">Shop</a></li>
+            <li><a href="contact.html" class="active">Contact</a></li>
+        </ul>
+    </nav>
+
+    <div class="contact-page-header">
+        <h1>Contact Our Team</h1>
+        <p>We’re here to help with your orders and style questions.</p>
+    </div>
+
+    <main class="container">
+        <div class="contact-grid">
+            <section class="form-container">
+                <form action="https://formspree.io/f/xjgaobwg" method="POST">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" name="name" required placeholder="John Doe">
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" name="_replyto" required placeholder="name@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Message</label>
+                        <textarea name="message" rows="6" required placeholder="How can we help?"></textarea>
+                    </div>
+                    
+                    <input type="hidden" name="_next" value="https://yourwebsite.com/thanks.html">
+                    
+                    <button type="submit" class="btn-main">Send Message</button>
+                </form>
+            </section>
+
+            <section class="contact-details">
+                <div class="info-card">
+                    <h3>Email Us</h3>
+                    <p>support@brightlabel.com</p>
+                </div>
+                <div class="info-card">
+                    <h3>Visit Us</h3>
+                    <p>Lagos, Nigeria</p>
+                </div>
+                <div class="info-card">
+                    <h3>Working Hours</h3>
+                    <p>Mon - Fri: 9:00 AM - 6:00 PM</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Bright Label Boutique.</p>
+    </footer>
+
+</body>
+</html>
