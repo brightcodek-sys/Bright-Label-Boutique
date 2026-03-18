@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us | Bright Label Boutique</title>
     <link rel="stylesheet" href="contact.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -19,50 +18,32 @@
         </ul>
     </nav>
 
-    <main class="contact-wrapper">
-        <div class="contact-card">
-            
-            <div class="side-info">
-                <h2>Get in Touch</h2>
-                <p>Have a question about an order or a specific style? We’re here to help.</p>
-                
-                <div class="contact-item">
-                    <span class="icon">📍</span>
-                    <p>Lagos, Nigeria</p>
-                </div>
-                <div class="contact-item">
-                    <span class="icon">✉️</span>
-                    <p>support@brightlabel.com</p>
-                </div>
-                <div class="contact-item">
-                    <span class="icon">🕒</span>
-                    <p>Mon - Fri, 9am - 6pm</p>
-                </div>
+    <main class="contact-section">
+        <h1>Contact Us</h1>
+        <p>Fill out the form below and we will get back to you soon.</p>
+
+        <form action="https://formspree.io/f/xjgaobwg" method="POST" id="contact-form">
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" name="name" id="name" required>
             </div>
 
-            <div class="side-form">
-                <form action="https://formspree.io/f/xjgaobwg" method="POST">
-                    <div class="input-container">
-                        <input type="text" name="name" required placeholder="Full Name">
-                    </div>
-                    <div class="input-container">
-                        <input type="email" name="email" required placeholder="Email Address">
-                    </div>
-                    <div class="input-container">
-                        <textarea name="message" rows="5" required placeholder="How can we help you?"></textarea>
-                    </div>
-                    
-                    <input type="text" name="_gotcha" style="display:none">
-                    
-                    <button type="submit" class="submit-btn">Send Message</button>
-                </form>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" name="email" id="email" required>
             </div>
 
-        </div>
+            <div class="form-group">
+                <label for="message">Message:</label>
+                <textarea name="message" id="message" rows="5" required></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn">Send Message</button>
+        </form>
     </main>
 
     <footer>
-        <p>&copy; 2026 Bright Label Boutique.</p>
+        <p>&copy; 2026 Bright Label Boutique</p>
     </footer>
 
 </body>
