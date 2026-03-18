@@ -1,107 +1,110 @@
 :root {
     --gold: #d4af37;
     --dark: #1a1a1a;
-    --gray: #f4f4f4;
+    --light-bg: #f8f9fa;
+    --white: #ffffff;
 }
 
 body {
     margin: 0;
     font-family: 'Inter', sans-serif;
-    background: var(--gray);
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+    background-color: var(--light-bg);
+    color: var(--dark);
 }
 
-/* Container & Card */
-.contact-container {
-    flex: 1;
+/* Navbar (Simplified for this page) */
+.navbar {
     display: flex;
-    align-items: center;
+    justify-content: space-between;
+    padding: 20px 5%;
+    background: var(--white);
+    border-bottom: 1px solid #eee;
+}
+
+.logo { font-weight: bold; font-size: 1.4rem; letter-spacing: 1px; }
+.logo span { color: var(--gold); }
+
+.nav-links { list-style: none; display: flex; gap: 25px; }
+.nav-links a { text-decoration: none; color: var(--dark); font-weight: 500; }
+.active { color: var(--gold) !important; border-bottom: 2px solid var(--gold); }
+
+/* Main Layout */
+.contact-wrapper {
+    display: flex;
     justify-content: center;
-    padding: 20px;
+    align-items: center;
+    min-height: 80vh;
+    padding: 40px 20px;
 }
 
 .contact-card {
     display: grid;
     grid-template-columns: 1fr 1.5fr;
-    max-width: 900px;
-    background: white;
-    border-radius: 20px;
+    max-width: 1000px;
+    background: var(--white);
+    border-radius: 15px;
     overflow: hidden;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
 }
 
-/* Left Side Styling */
-.contact-info {
+/* Dark Side Styling */
+.side-info {
     background: var(--dark);
-    color: white;
-    padding: 40px;
+    color: var(--white);
+    padding: 50px;
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
-.contact-info h2 { color: var(--gold); margin-bottom: 20px; }
-.info-item { display: flex; align-items: center; margin-bottom: 15px; gap: 10px; }
+.side-info h2 { color: var(--gold); font-size: 2rem; margin-bottom: 15px; }
+.contact-item { display: flex; align-items: center; margin-bottom: 20px; gap: 15px; }
+.icon { font-size: 1.2rem; }
 
-/* Right Side: Floating Labels */
-.contact-form-section { padding: 40px; }
-
-.input-group {
-    position: relative;
-    margin-bottom: 30px;
+/* Form Side Styling */
+.side-form {
+    padding: 50px;
+    background: var(--white);
 }
 
-.input-group input, .input-group textarea {
+.input-container {
+    margin-bottom: 20px;
+}
+
+input, textarea {
     width: 100%;
-    padding: 10px 0;
-    border: none;
-    border-bottom: 2px solid #ccc;
-    outline: none;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
     font-size: 1rem;
-    background: transparent;
-    transition: 0.3s;
+    transition: all 0.3s;
+    box-sizing: border-box;
 }
 
-.input-group label {
-    position: absolute;
-    top: 10px;
-    left: 0;
-    color: #999;
-    pointer-events: none;
-    transition: 0.3s;
+input:focus, textarea:focus {
+    outline: none;
+    border-color: var(--gold);
+    box-shadow: 0 0 8px rgba(212, 175, 55, 0.2);
 }
 
-/* The Magic: Label moves up when focused or typed in */
-.input-group input:focus ~ label,
-.input-group input:valid ~ label,
-.input-group textarea:focus ~ label,
-.input-group textarea:valid ~ label {
-    top: -20px;
-    font-size: 0.8rem;
-    color: var(--gold);
-}
-
-.input-group input:focus, .input-group textarea:focus {
-    border-bottom: 2px solid var(--gold);
-}
-
-.send-btn {
+.submit-btn {
     background: var(--dark);
-    color: white;
+    color: var(--white);
     border: none;
-    padding: 15px 30px;
-    border-radius: 50px;
-    cursor: pointer;
+    padding: 15px 40px;
+    border-radius: 8px;
     font-weight: bold;
+    cursor: pointer;
     width: 100%;
-    transition: 0.3s;
+    transition: background 0.3s;
 }
 
-.send-btn:hover { background: var(--gold); }
+.submit-btn:hover {
+    background: var(--gold);
+}
 
-/* Responsive */
+/* Mobile Tweak */
 @media (max-width: 768px) {
     .contact-card { grid-template-columns: 1fr; }
+    .side-info { padding: 30px; }
 }
