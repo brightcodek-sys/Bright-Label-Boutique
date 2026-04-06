@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bright Label Boutique | Home</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom font to give it a boutique feel */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-5 flex justify-center items-center">
+            <h1 class="text-2xl font-bold tracking-[0.3em] uppercase text-black">Bright Label</h1>
+        </div>
+    </header>
+
+    <main>
+        <section class="bg-black text-white py-24 px-6 text-center">
+            <div class="max-w-3xl mx-auto">
+                <h2 class="text-4xl md:text-5xl font-light mb-4 italic">The New Collection</h2>
+                <p class="text-gray-400 text-lg tracking-wide uppercase">Refined style for the modern world.</p>
+            </div>
+        </section>
+
+        <div class="max-w-7xl mx-auto px-6 py-16">
+            <div id="product-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="col-span-full text-center py-20">
+                    <p class="text-gray-500 animate-pulse text-xl">Connecting to database...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+        import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
+
+        // IMPORTANT: Replace this with your actual config from Firebase Console
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "your-project.firebaseapp.com",
+            projectId: "your-project",
+            storageBucket: "your-project.appspot.com",
+            messagingSenderId: "0000000000",
+            appId: "1:000000000:web:abcdef"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const container = document.getElementById('product-list');
+
+        // Real-time listener for your 'products' collection
+        onSnapshot(collection(db, "products"), (snapshot) => {
+            container.innerHTML = ""; 
+
+            if (snapshot.empty) {
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-20 bg-white border border-dashed border-gray-300 rounded-lg">
+                        <p class="text-gray-400">Our digital shelves are currently being stocked.</p>
+                    </div>`;
+                return;
+            }
+
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                const card = `
+                    <div class="group bg-white border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-xl hover:border-black">
+                        <div class="h-80 overflow-hidden bg-gray-200">
+                            <img src="${data.image || 'https://via.placeholder.com/400x500?text=No+Image'}" 
+                                 alt="${data.name}" 
+                                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-sm uppercase tracking-widest text-gray-500 mb-1">${data.category || 'Apparel'}</h3>
+                            <h4 class="text-lg font-bold text-black mb-2">${data.name}</h4>
+                            <p class="text-xl font-light text-black">₦${data.price}</p>
+                            <button class="mt-4 w-full border border-black py-2 text-sm uppercase tracking-tighter hover:bg-black hover:text-white transition-colors">
+                                View Item
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += card;
+            });
+        });
+    </script>
+</body>
+</html>
