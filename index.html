@@ -9,132 +9,171 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
         .view { display: none; }
-        .view.active { display: block; animation: fadeIn 0.4s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .view.active { display: block; animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body class="bg-white text-gray-900">
 
-    <header class="bg-white/90 border-b border-gray-100 sticky top-0 z-50">
+    <header class="bg-white/90 backdrop-blur-md border-b border-gray-100 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
             <h1 class="text-xl font-bold tracking-[0.4em] uppercase cursor-pointer" onclick="showView('home')">Bright Label</h1>
-            
-            <nav class="hidden md:flex space-x-8 text-[10px] uppercase tracking-widest font-bold">
+            <nav class="hidden md:flex space-x-8 text-[10px] uppercase tracking-widest font-bold items-center">
                 <button onclick="showView('home')" class="hover:text-gray-400">Home</button>
                 <button onclick="showView('shop')" class="hover:text-gray-400">Shop</button>
                 <button onclick="showView('about')" class="hover:text-gray-400">About</button>
                 <button onclick="showView('contact')" class="hover:text-gray-400">Contact</button>
-                <button onclick="showView('admin')" class="bg-black text-white px-4 py-2 hover:bg-gray-800 transition">Admin</button>
+                <button onclick="showView('admin')" class="bg-black text-white px-5 py-2.5 hover:bg-zinc-800 transition">Admin</button>
             </nav>
-
-            <button id="menu-btn" class="md:hidden flex flex-col space-y-1.5 p-2">
-                <span class="w-6 h-0.5 bg-black"></span>
-                <span class="w-6 h-0.5 bg-black"></span>
-                <span class="w-6 h-0.5 bg-black"></span>
+            <button id="menu-btn" class="md:hidden p-2">
+                <span class="block w-6 h-0.5 bg-black mb-1.5"></span>
+                <span class="block w-6 h-0.5 bg-black mb-1.5"></span>
+                <span class="block w-6 h-0.5 bg-black"></span>
             </button>
+        </div>
+        <div id="mobile-menu" class="hidden bg-white border-b border-gray-100 md:hidden text-center py-10 space-y-6 text-xs uppercase tracking-[0.2em]">
+            <button onclick="showView('home')" class="block w-full">Home</button>
+            <button onclick="showView('shop')" class="block w-full">Shop</button>
+            <button onclick="showView('about')" class="block w-full">About</button>
+            <button onclick="showView('contact')" class="block w-full">Contact</button>
+            <button onclick="showView('admin')" class="block w-full font-bold">Admin Panel</button>
         </div>
     </header>
 
-    <section id="home-view" class="view active">
-        <div class="bg-neutral-950 text-white py-40 px-6 text-center">
-            <h2 class="text-5xl font-light mb-6 italic">2026 Arrivals</h2>
-            <button onclick="showView('shop')" class="border border-white px-10 py-4 text-[10px] uppercase tracking-widest hover:bg-white hover:text-black transition">Enter Shop</button>
-        </div>
-    </section>
-
-    <section id="shop-view" class="view max-w-7xl mx-auto px-6 py-20">
-        <h3 class="text-2xl font-bold uppercase tracking-tighter mb-12 border-b pb-4">Our Collection</h3>
-        <div id="product-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+    <main>
+        <section id="home-view" class="view active">
+            <div class="bg-neutral-950 text-white py-48 md:py-64 px-6 text-center">
+                <h2 class="text-4xl md:text-7xl font-light mb-6 italic">The 2026 Collection</h2>
+                <button onclick="showView('shop')" class="border border-white px-12 py-5 text-[10px] uppercase tracking-widest hover:bg-white hover:text-black transition">Enter Boutique</button>
             </div>
-    </section>
+        </section>
 
-    <section id="about-view" class="view bg-stone-50 py-32 px-6">
-        <div class="max-w-2xl mx-auto text-center">
-            <h3 class="text-[10px] uppercase tracking-[0.6em] text-gray-400 mb-8 font-bold">The Vision</h3>
-            <p class="text-2xl font-light text-neutral-800 leading-relaxed italic">
-                "Bright Label is where high-end development meets curated style."
-            </p>
-        </div>
-    </section>
+        <section id="shop-view" class="view max-w-7xl mx-auto px-6 py-20">
+            <h3 class="text-3xl font-bold uppercase tracking-tighter italic mb-12">Our Shop</h3>
+            <div id="product-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10"></div>
+        </section>
 
-    <section id="contact-view" class="view max-w-4xl mx-auto px-6 py-20">
-        <h3 class="text-2xl font-bold uppercase mb-10">Concierge</h3>
-        <div class="grid md:grid-cols-2 gap-12">
-            <div class="space-y-4">
-                <p class="text-sm font-bold uppercase">Location</p>
-                <p class="text-gray-500 text-sm">Lagos, Nigeria</p>
+        <section id="about-view" class="view bg-stone-50 py-32 px-6 text-center">
+            <h3 class="text-[10px] uppercase tracking-[0.6em] text-gray-400 mb-10">Behind the Label</h3>
+            <p class="text-2xl font-light max-w-2xl mx-auto italic">"Crafting digital experiences as fine as tailored silk."</p>
+        </section>
+
+        <section id="contact-view" class="view max-w-7xl mx-auto px-6 py-24">
+            <div class="grid md:grid-cols-2 gap-20">
+                <h3 class="text-4xl font-bold uppercase">Concierge</h3>
+                <form class="space-y-6">
+                    <input type="text" placeholder="NAME" class="w-full border-b py-4 outline-none text-[10px] tracking-widest uppercase">
+                    <button class="w-full bg-black text-white py-5 text-[10px] font-bold tracking-[0.4em]">Send Inquiry</button>
+                </form>
             </div>
-            <form class="space-y-4">
-                <input type="text" placeholder="NAME" class="w-full border-b py-3 outline-none focus:border-black text-xs">
-                <button class="bg-black text-white w-full py-4 text-[10px] tracking-widest">SEND MESSAGE</button>
-            </form>
-        </div>
-    </section>
+        </section>
 
-    <section id="admin-view" class="view max-w-xl mx-auto px-6 py-20 bg-gray-50 my-10 border border-gray-100">
-        <h3 class="text-xl font-bold uppercase mb-8">Admin Dashboard</h3>
-        <form id="admin-form" class="space-y-6 bg-white p-8 shadow-sm">
-            <input type="text" id="p-name" placeholder="PRODUCT NAME" class="w-full border-b py-2 text-xs outline-none" required>
-            <input type="number" id="p-price" placeholder="PRICE (₦)" class="w-full border-b py-2 text-xs outline-none" required>
-            <input type="text" id="p-img" placeholder="IMAGE URL" class="w-full border-b py-2 text-xs outline-none">
-            <button type="submit" class="w-full bg-black text-white py-4 text-[10px] font-bold">ADD TO BOUTIQUE</button>
-        </form>
-    </section>
+        <section id="admin-view" class="view max-w-xl mx-auto px-6 py-24">
+            <div id="admin-login-box" class="bg-white border p-10 shadow-xl">
+                <h3 class="text-center text-xl font-bold uppercase tracking-[0.3em] mb-8">Secure Access</h3>
+                <form id="login-form" class="space-y-6">
+                    <input type="email" id="adm-email" placeholder="EMAIL" class="w-full border-b py-3 text-xs outline-none">
+                    <input type="password" id="adm-pass" placeholder="PASSWORD" class="w-full border-b py-3 text-xs outline-none">
+                    <button type="submit" class="w-full bg-black text-white py-4 text-[10px] font-bold">AUTHENTICATE</button>
+                </form>
+            </div>
+            <div id="admin-dashboard" class="hidden">
+                <div class="flex justify-between items-center mb-10">
+                    <h3 class="text-2xl font-bold uppercase tracking-tighter">Inventory</h3>
+                    <button id="logout-btn" class="text-[10px] font-bold border-b-2 border-black">Logout</button>
+                </div>
+                <form id="product-form" class="bg-gray-50 p-8 space-y-6">
+                    <input type="text" id="p-name" placeholder="PRODUCT NAME" class="w-full bg-transparent border-b py-3 text-xs outline-none" required>
+                    <input type="number" id="p-price" placeholder="PRICE (₦)" class="w-full bg-transparent border-b py-3 text-xs outline-none" required>
+                    <input type="text" id="p-img" placeholder="IMAGE URL" class="w-full bg-transparent border-b py-3 text-xs outline-none">
+                    <button type="submit" class="w-full bg-black text-white py-5 text-[10px] font-bold">Upload to Storefront</button>
+                </form>
+            </div>
+        </section>
+    </main>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-analytics.js";
+        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
 
-        // CONFIG
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "your-project.firebaseapp.com",
-            projectId: "your-project",
-            storageBucket: "your-project.appspot.com",
-            messagingSenderId: "0000000000",
-            appId: "1:000000000:web:abcdef"
+            apiKey: "AIzaSyBzVQi7NmFPJA44ulxtIJujA4fn2Hc7qLA",
+            authDomain: "bright-label.firebaseapp.com",
+            projectId: "bright-label",
+            storageBucket: "bright-label.firebasestorage.app",
+            messagingSenderId: "1008754785320",
+            appId: "1:1008754785320:web:988554796007d853b6891d",
+            measurementId: "G-F07PR2G60D"
         };
 
         const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
         const db = getFirestore(app);
+        const auth = getAuth(app);
 
-        // VIEW SWITCHER LOGIC
-        window.showView = (viewName) => {
+        // --- View Logic ---
+        window.showView = (name) => {
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-            document.getElementById(`${viewName}-view`).classList.add('active');
+            document.getElementById(`${name}-view`).classList.add('active');
+            document.getElementById('mobile-menu').classList.add('hidden');
             window.scrollTo(0,0);
         };
+        document.getElementById('menu-btn').onclick = () => document.getElementById('mobile-menu').classList.toggle('hidden');
 
-        // ADMIN UPLOAD
-        const adminForm = document.getElementById('admin-form');
-        adminForm.addEventListener('submit', async (e) => {
+        // --- Auth Logic ---
+        onAuthStateChanged(auth, (user) => {
+            document.getElementById('admin-login-box').classList.toggle('hidden', !!user);
+            document.getElementById('admin-dashboard').classList.toggle('hidden', !user);
+            renderProducts(); // Refresh buttons
+        });
+
+        document.getElementById('login-form').onsubmit = async (e) => {
+            e.preventDefault();
+            try { await signInWithEmailAndPassword(auth, document.getElementById('adm-email').value, document.getElementById('adm-pass').value); }
+            catch { alert("Login Failed"); }
+        };
+
+        document.getElementById('logout-btn').onclick = () => signOut(auth);
+
+        // --- Firestore Logic ---
+        document.getElementById('product-form').onsubmit = async (e) => {
             e.preventDefault();
             await addDoc(collection(db, "products"), {
                 name: document.getElementById('p-name').value,
                 price: Number(document.getElementById('p-price').value),
-                image: document.getElementById('p-img').value
+                image: document.getElementById('p-img').value || 'https://via.placeholder.com/600x800'
             });
-            alert("Added!");
-            adminForm.reset();
-        });
+            document.getElementById('product-form').reset();
+        };
 
-        // SHOP DISPLAY
-        const list = document.getElementById('product-list');
-        onSnapshot(collection(db, "products"), (snap) => {
-            list.innerHTML = "";
-            snap.forEach(doc => {
-                const item = doc.data();
-                list.innerHTML += `
-                    <div class="group">
-                        <div class="aspect-[4/5] bg-gray-100 mb-4 overflow-hidden">
-                            <img src="${item.image}" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
+        function renderProducts() {
+            const list = document.getElementById('product-list');
+            onSnapshot(collection(db, "products"), (snap) => {
+                list.innerHTML = "";
+                snap.forEach(documentSnapshot => {
+                    const item = documentSnapshot.data();
+                    const id = documentSnapshot.id;
+                    list.innerHTML += `
+                        <div class="group relative">
+                            <div class="aspect-[3/4] bg-neutral-100 overflow-hidden mb-6">
+                                <img src="${item.image}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700">
+                            </div>
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h4 class="text-[10px] font-bold uppercase tracking-widest">${item.name}</h4>
+                                    <p class="text-sm font-semibold">₦${item.price.toLocaleString()}</p>
+                                </div>
+                                ${auth.currentUser ? `<button onclick="window.del('${id}')" class="text-[9px] text-red-500 font-bold uppercase">Del</button>` : ''}
+                            </div>
                         </div>
-                        <h4 class="text-xs font-bold uppercase tracking-widest">${item.name}</h4>
-                        <p class="text-sm font-semibold mt-1">₦${item.price}</p>
-                    </div>
-                `;
+                    `;
+                });
             });
-        });
+        }
+        window.del = (id) => confirm("Remove item?") && deleteDoc(doc(db, "products", id));
+        renderProducts();
     </script>
 </body>
 </html>
