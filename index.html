@@ -6,79 +6,135 @@
     <title>Bright Label Boutique</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+        .view { display: none; }
+        .view.active { display: block; animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body class="bg-white text-gray-900">
 
-    <header class="bg-white/80 backdrop-blur-md border-b border-gray-100 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <h1 class="text-xl font-bold tracking-[0.4em] uppercase">Bright Label</h1>
+    <header class="bg-white/90 border-b border-gray-100 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
+            <h1 class="text-xl font-bold tracking-[0.4em] uppercase cursor-pointer" onclick="showView('home')">Bright Label</h1>
             
-            <nav class="hidden md:flex space-x-8 text-xs uppercase tracking-widest font-medium">
-                <a href="#" class="hover:text-gray-500 transition">Home</a>
-                <a href="#shop" class="hover:text-gray-500 transition">Shop</a>
-                <a href="#about" class="hover:text-gray-500 transition">About</a>
-                <a href="#contact" class="hover:text-gray-500 transition">Contact</a>
+            <nav class="hidden md:flex space-x-8 text-[10px] uppercase tracking-widest font-bold">
+                <button onclick="showView('home')" class="hover:text-gray-400">Home</button>
+                <button onclick="showView('shop')" class="hover:text-gray-400">Shop</button>
+                <button onclick="showView('about')" class="hover:text-gray-400">About</button>
+                <button onclick="showView('contact')" class="hover:text-gray-400">Contact</button>
+                <button onclick="showView('admin')" class="bg-black text-white px-4 py-2 hover:bg-gray-800 transition">Admin</button>
             </nav>
 
-            <a href="admin.html" class="text-[10px] uppercase border border-black px-4 py-2 hover:bg-black hover:text-white transition">
-                Admin Panel
-            </a>
+            <button id="menu-btn" class="md:hidden flex flex-col space-y-1.5 p-2">
+                <span class="w-6 h-0.5 bg-black"></span>
+                <span class="w-6 h-0.5 bg-black"></span>
+                <span class="w-6 h-0.5 bg-black"></span>
+            </button>
         </div>
     </header>
 
-    <main>
-        <section class="bg-neutral-900 text-white py-32 px-6 text-center">
-            <h2 class="text-5xl font-light mb-4 italic">Reimagined Style</h2>
-            <p class="text-gray-400 text-sm tracking-[0.3em] uppercase">Bright Label Boutique 2026</p>
-        </section>
+    <section id="home-view" class="view active">
+        <div class="bg-neutral-950 text-white py-40 px-6 text-center">
+            <h2 class="text-5xl font-light mb-6 italic">2026 Arrivals</h2>
+            <button onclick="showView('shop')" class="border border-white px-10 py-4 text-[10px] uppercase tracking-widest hover:bg-white hover:text-black transition">Enter Shop</button>
+        </div>
+    </section>
 
-        <section id="shop" class="max-w-7xl mx-auto px-6 py-20">
-            <h3 class="text-2xl font-bold mb-10 uppercase tracking-tighter">Current Collection</h3>
-            <div id="product-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
-                <p class="col-span-full text-center text-gray-400 animate-pulse">Fetching collection...</p>
+    <section id="shop-view" class="view max-w-7xl mx-auto px-6 py-20">
+        <h3 class="text-2xl font-bold uppercase tracking-tighter mb-12 border-b pb-4">Our Collection</h3>
+        <div id="product-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
             </div>
-        </section>
+    </section>
 
-        <section id="about" class="bg-gray-50 py-24 px-6">
-            <div class="max-w-3xl mx-auto text-center">
-                <h3 class="text-xs uppercase tracking-[0.5em] text-gray-500 mb-6">Our Story</h3>
-                <p class="text-xl leading-relaxed font-light text-gray-700">
-                    Bright Label Boutique was founded on the principle of high-quality digital commerce. We combine modern web technology with a curated fashion eye to bring you the best in local and international trends.
-                </p>
+    <section id="about-view" class="view bg-stone-50 py-32 px-6">
+        <div class="max-w-2xl mx-auto text-center">
+            <h3 class="text-[10px] uppercase tracking-[0.6em] text-gray-400 mb-8 font-bold">The Vision</h3>
+            <p class="text-2xl font-light text-neutral-800 leading-relaxed italic">
+                "Bright Label is where high-end development meets curated style."
+            </p>
+        </div>
+    </section>
+
+    <section id="contact-view" class="view max-w-4xl mx-auto px-6 py-20">
+        <h3 class="text-2xl font-bold uppercase mb-10">Concierge</h3>
+        <div class="grid md:grid-cols-2 gap-12">
+            <div class="space-y-4">
+                <p class="text-sm font-bold uppercase">Location</p>
+                <p class="text-gray-500 text-sm">Lagos, Nigeria</p>
             </div>
-        </section>
+            <form class="space-y-4">
+                <input type="text" placeholder="NAME" class="w-full border-b py-3 outline-none focus:border-black text-xs">
+                <button class="bg-black text-white w-full py-4 text-[10px] tracking-widest">SEND MESSAGE</button>
+            </form>
+        </div>
+    </section>
 
-        <section id="contact" class="max-w-7xl mx-auto px-6 py-24 border-t border-gray-100">
-            <div class="grid md:grid-cols-2 gap-16">
-                <div>
-                    <h3 class="text-2xl font-bold uppercase mb-4">Get in Touch</h3>
-                    <p class="text-gray-600 mb-8">Have a question about an order? Our team is here to help.</p>
-                    <div class="space-y-4 text-sm tracking-wide">
-                        <p><strong>Email:</strong> hello@brightlabel.com</p>
-                        <p><strong>Location:</strong> Lagos, Nigeria</p>
-                    </div>
-                </div>
-                <form class="space-y-4">
-                    <input type="text" placeholder="Your Name" class="w-full border-b border-gray-300 py-3 focus:border-black outline-none transition">
-                    <input type="email" placeholder="Email Address" class="w-full border-b border-gray-300 py-3 focus:border-black outline-none transition">
-                    <textarea placeholder="Message" rows="3" class="w-full border-b border-gray-300 py-3 focus:border-black outline-none transition"></textarea>
-                    <button class="bg-black text-white px-8 py-3 text-xs uppercase tracking-widest hover:bg-gray-800 transition">Send Message</button>
-                </form>
-            </div>
-        </section>
-    </main>
-
-    <footer class="bg-white py-12 border-t border-gray-100 text-center">
-        <p class="text-[10px] text-gray-400 uppercase tracking-[0.2em]">© 2026 Bright Label Boutique. Built with Firebase.</p>
-    </footer>
+    <section id="admin-view" class="view max-w-xl mx-auto px-6 py-20 bg-gray-50 my-10 border border-gray-100">
+        <h3 class="text-xl font-bold uppercase mb-8">Admin Dashboard</h3>
+        <form id="admin-form" class="space-y-6 bg-white p-8 shadow-sm">
+            <input type="text" id="p-name" placeholder="PRODUCT NAME" class="w-full border-b py-2 text-xs outline-none" required>
+            <input type="number" id="p-price" placeholder="PRICE (₦)" class="w-full border-b py-2 text-xs outline-none" required>
+            <input type="text" id="p-img" placeholder="IMAGE URL" class="w-full border-b py-2 text-xs outline-none">
+            <button type="submit" class="w-full bg-black text-white py-4 text-[10px] font-bold">ADD TO BOUTIQUE</button>
+        </form>
+    </section>
 
     <script type="module">
-        // ... (Paste your Firebase app.js logic here)
-    </script>
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
 
+        // CONFIG
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "your-project.firebaseapp.com",
+            projectId: "your-project",
+            storageBucket: "your-project.appspot.com",
+            messagingSenderId: "0000000000",
+            appId: "1:000000000:web:abcdef"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // VIEW SWITCHER LOGIC
+        window.showView = (viewName) => {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById(`${viewName}-view`).classList.add('active');
+            window.scrollTo(0,0);
+        };
+
+        // ADMIN UPLOAD
+        const adminForm = document.getElementById('admin-form');
+        adminForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await addDoc(collection(db, "products"), {
+                name: document.getElementById('p-name').value,
+                price: Number(document.getElementById('p-price').value),
+                image: document.getElementById('p-img').value
+            });
+            alert("Added!");
+            adminForm.reset();
+        });
+
+        // SHOP DISPLAY
+        const list = document.getElementById('product-list');
+        onSnapshot(collection(db, "products"), (snap) => {
+            list.innerHTML = "";
+            snap.forEach(doc => {
+                const item = doc.data();
+                list.innerHTML += `
+                    <div class="group">
+                        <div class="aspect-[4/5] bg-gray-100 mb-4 overflow-hidden">
+                            <img src="${item.image}" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
+                        </div>
+                        <h4 class="text-xs font-bold uppercase tracking-widest">${item.name}</h4>
+                        <p class="text-sm font-semibold mt-1">₦${item.price}</p>
+                    </div>
+                `;
+            });
+        });
+    </script>
 </body>
 </html>
-
