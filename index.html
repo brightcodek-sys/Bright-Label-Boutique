@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bright Label Boutique</title>
+    <title>Bright Label | Inventory & Storage</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
         .view { display: none; }
-        .view.active { display: block; animation: fadeIn 0.5s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        .view.active { display: block; animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body class="bg-white text-gray-900">
@@ -18,85 +18,86 @@
     <header class="bg-white/90 backdrop-blur-md border-b border-gray-100 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
             <h1 class="text-xl font-bold tracking-[0.4em] uppercase cursor-pointer" onclick="showView('home')">Bright Label</h1>
+            
             <nav class="hidden md:flex space-x-8 text-[10px] uppercase tracking-widest font-bold items-center">
                 <button onclick="showView('home')" class="hover:text-gray-400">Home</button>
                 <button onclick="showView('shop')" class="hover:text-gray-400">Shop</button>
-                <button onclick="showView('about')" class="hover:text-gray-400">About</button>
-                <button onclick="showView('contact')" class="hover:text-gray-400">Contact</button>
-                <button onclick="showView('admin')" class="bg-black text-white px-5 py-2.5 hover:bg-zinc-800 transition">Admin</button>
+                <button onclick="showView('admin')" class="bg-black text-white px-5 py-2.5 hover:bg-zinc-800 transition">Admin Dashboard</button>
+                <button onclick="showView('checkout')" class="relative">BAG (<span id="cart-count">0</span>)</button>
             </nav>
-            <button id="menu-btn" class="md:hidden p-2">
-                <span class="block w-6 h-0.5 bg-black mb-1.5"></span>
-                <span class="block w-6 h-0.5 bg-black mb-1.5"></span>
-                <span class="block w-6 h-0.5 bg-black"></span>
-            </button>
-        </div>
-        <div id="mobile-menu" class="hidden bg-white border-b border-gray-100 md:hidden text-center py-10 space-y-6 text-xs uppercase tracking-[0.2em]">
-            <button onclick="showView('home')" class="block w-full">Home</button>
-            <button onclick="showView('shop')" class="block w-full">Shop</button>
-            <button onclick="showView('about')" class="block w-full">About</button>
-            <button onclick="showView('contact')" class="block w-full">Contact</button>
-            <button onclick="showView('admin')" class="block w-full font-bold">Admin Panel</button>
         </div>
     </header>
 
     <main>
         <section id="home-view" class="view active">
-            <div class="bg-neutral-950 text-white py-48 md:py-64 px-6 text-center">
-                <h2 class="text-4xl md:text-7xl font-light mb-6 italic">The 2026 Collection</h2>
-                <button onclick="showView('shop')" class="border border-white px-12 py-5 text-[10px] uppercase tracking-widest hover:bg-white hover:text-black transition">Enter Boutique</button>
+            <div class="bg-neutral-950 text-white py-56 px-6 text-center">
+                <h2 class="text-5xl font-light mb-6 italic tracking-tight">The Future of Retail</h2>
+                <button onclick="showView('shop')" class="border border-white px-12 py-5 text-[10px] uppercase tracking-widest hover:bg-white hover:text-black transition">Enter Shop</button>
             </div>
         </section>
 
         <section id="shop-view" class="view max-w-7xl mx-auto px-6 py-20">
-            <h3 class="text-3xl font-bold uppercase tracking-tighter italic mb-12">Our Shop</h3>
-            <div id="product-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10"></div>
+            <h3 class="text-3xl font-bold uppercase tracking-tighter italic mb-12">New Arrivals</h3>
+            <div id="product-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-16"></div>
         </section>
 
-        <section id="about-view" class="view bg-stone-50 py-32 px-6 text-center">
-            <h3 class="text-[10px] uppercase tracking-[0.6em] text-gray-400 mb-10">Behind the Label</h3>
-            <p class="text-2xl font-light max-w-2xl mx-auto italic">"Crafting digital experiences as fine as tailored silk."</p>
-        </section>
-
-        <section id="contact-view" class="view max-w-7xl mx-auto px-6 py-24">
-            <div class="grid md:grid-cols-2 gap-20">
-                <h3 class="text-4xl font-bold uppercase">Concierge</h3>
-                <form class="space-y-6">
-                    <input type="text" placeholder="NAME" class="w-full border-b py-4 outline-none text-[10px] tracking-widest uppercase">
-                    <button class="w-full bg-black text-white py-5 text-[10px] font-bold tracking-[0.4em]">Send Inquiry</button>
-                </form>
+        <section id="admin-view" class="view max-w-2xl mx-auto px-6 py-24">
+            <div id="admin-login-box" class="bg-white border p-10 shadow-2xl space-y-8 text-center">
+                <h3 class="text-xl font-bold uppercase tracking-[0.3em]">Administrator Access</h3>
+                <button id="google-login-btn" class="w-full border border-black py-4 text-[10px] font-bold tracking-widest hover:bg-gray-50 transition">CONTINUE WITH GOOGLE</button>
             </div>
-        </section>
 
-        <section id="admin-view" class="view max-w-xl mx-auto px-6 py-24">
-            <div id="admin-login-box" class="bg-white border p-10 shadow-xl">
-                <h3 class="text-center text-xl font-bold uppercase tracking-[0.3em] mb-8">Secure Access</h3>
-                <form id="login-form" class="space-y-6">
-                    <input type="email" id="adm-email" placeholder="EMAIL" class="w-full border-b py-3 text-xs outline-none">
-                    <input type="password" id="adm-pass" placeholder="PASSWORD" class="w-full border-b py-3 text-xs outline-none">
-                    <button type="submit" class="w-full bg-black text-white py-4 text-[10px] font-bold">AUTHENTICATE</button>
-                </form>
-            </div>
-            <div id="admin-dashboard" class="hidden">
-                <div class="flex justify-between items-center mb-10">
-                    <h3 class="text-2xl font-bold uppercase tracking-tighter">Inventory</h3>
-                    <button id="logout-btn" class="text-[10px] font-bold border-b-2 border-black">Logout</button>
+            <div id="admin-dashboard" class="hidden space-y-12">
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="bg-gray-50 p-6 border border-gray-100">
+                        <p class="text-[10px] uppercase text-gray-400 font-bold mb-1">Total Inventory Items</p>
+                        <h4 id="inventory-count" class="text-4xl font-bold">0</h4>
+                    </div>
+                    <div class="flex items-end justify-end">
+                        <button id="logout-btn" class="text-[10px] font-bold uppercase underline">Sign Out</button>
+                    </div>
                 </div>
-                <form id="product-form" class="bg-gray-50 p-8 space-y-6">
-                    <input type="text" id="p-name" placeholder="PRODUCT NAME" class="w-full bg-transparent border-b py-3 text-xs outline-none" required>
-                    <input type="number" id="p-price" placeholder="PRICE (₦)" class="w-full bg-transparent border-b py-3 text-xs outline-none" required>
-                    <input type="text" id="p-img" placeholder="IMAGE URL" class="w-full bg-transparent border-b py-3 text-xs outline-none">
-                    <button type="submit" class="w-full bg-black text-white py-5 text-[10px] font-bold">Upload to Storefront</button>
+
+                <form id="product-form" class="space-y-6 bg-white p-8 border shadow-sm">
+                    <h4 class="text-xs font-bold uppercase tracking-widest">Add New Piece</h4>
+                    <input type="text" id="p-name" placeholder="PRODUCT NAME" class="w-full border-b py-2 text-xs outline-none focus:border-black uppercase" required>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <input type="number" id="p-price" placeholder="ORIGINAL PRICE (₦)" class="w-full border-b py-2 text-xs outline-none focus:border-black" required>
+                        <input type="number" id="p-discount" placeholder="DISCOUNT PRICE (₦)" class="w-full border-b py-2 text-xs outline-none focus:border-black">
+                    </div>
+
+                    <input type="number" id="p-stock" placeholder="QUANTITY IN STOCK" class="w-full border-b py-2 text-xs outline-none focus:border-black" required>
+                    
+                    <div class="space-y-2">
+                        <label class="block text-[10px] text-gray-400 font-bold uppercase">Product Image</label>
+                        <input type="file" id="p-file" class="text-xs w-full cursor-pointer file:bg-black file:text-white file:border-none file:px-4 file:py-2 file:text-[10px] file:uppercase file:font-bold hover:file:bg-zinc-800" accept="image/*">
+                    </div>
+
+                    <button type="submit" id="submit-btn" class="w-full bg-black text-white py-5 text-[10px] font-bold uppercase tracking-widest">
+                        Upload & Save Product
+                    </button>
                 </form>
             </div>
+        </section>
+
+        <section id="checkout-view" class="view max-w-2xl mx-auto px-6 py-20">
+            <h3 class="text-3xl font-bold uppercase mb-10 tracking-tighter">Your Bag</h3>
+            <div id="cart-items" class="space-y-4 mb-10 border-t pt-4"></div>
+            <div class="flex justify-between font-bold text-xl uppercase py-6 border-t">
+                <span>Total</span>
+                <span id="cart-total">₦0</span>
+            </div>
+            <button id="place-order-btn" class="w-full bg-black text-white py-5 text-[10px] font-bold uppercase tracking-[0.3em]">Complete Purchase</button>
         </section>
     </main>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-analytics.js";
-        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
-        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
+        // NEW STORAGE IMPORT
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-storage.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBzVQi7NmFPJA44ulxtIJujA4fn2Hc7qLA",
@@ -104,76 +105,132 @@
             projectId: "bright-label",
             storageBucket: "bright-label.firebasestorage.app",
             messagingSenderId: "1008754785320",
-            appId: "1:1008754785320:web:988554796007d853b6891d",
-            measurementId: "G-F07PR2G60D"
+            appId: "1:1008754785320:web:988554796007d853b6891d"
         };
 
         const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
         const db = getFirestore(app);
         const auth = getAuth(app);
+        const storage = getStorage(app); // Initialize Storage
+        const provider = new GoogleAuthProvider();
 
-        // --- View Logic ---
+        const ADMIN_EMAIL = "your-email@gmail.com"; 
+        let cart = [];
+
+        // --- NAVIGATION ---
         window.showView = (name) => {
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.getElementById(`${name}-view`).classList.add('active');
-            document.getElementById('mobile-menu').classList.add('hidden');
             window.scrollTo(0,0);
         };
-        document.getElementById('menu-btn').onclick = () => document.getElementById('mobile-menu').classList.toggle('hidden');
 
-        // --- Auth Logic ---
+        // --- AUTH ---
         onAuthStateChanged(auth, (user) => {
-            document.getElementById('admin-login-box').classList.toggle('hidden', !!user);
-            document.getElementById('admin-dashboard').classList.toggle('hidden', !user);
-            renderProducts(); // Refresh buttons
+            const isAdmin = user && user.email === ADMIN_EMAIL;
+            document.getElementById('admin-login-box').classList.toggle('hidden', isAdmin);
+            document.getElementById('admin-dashboard').classList.toggle('hidden', !isAdmin);
+            if (user && !isAdmin) { alert("Admin Access Denied."); signOut(auth); }
         });
-
-        document.getElementById('login-form').onsubmit = async (e) => {
-            e.preventDefault();
-            try { await signInWithEmailAndPassword(auth, document.getElementById('adm-email').value, document.getElementById('adm-pass').value); }
-            catch { alert("Login Failed"); }
-        };
-
+        document.getElementById('google-login-btn').onclick = () => signInWithPopup(auth, provider);
         document.getElementById('logout-btn').onclick = () => signOut(auth);
 
-        // --- Firestore Logic ---
+        // --- ADMIN: IMAGE UPLOAD & SAVE ---
         document.getElementById('product-form').onsubmit = async (e) => {
             e.preventDefault();
-            await addDoc(collection(db, "products"), {
-                name: document.getElementById('p-name').value,
-                price: Number(document.getElementById('p-price').value),
-                image: document.getElementById('p-img').value || 'https://via.placeholder.com/600x800'
-            });
-            document.getElementById('product-form').reset();
+            const btn = document.getElementById('submit-btn');
+            const file = document.getElementById('p-file').files[0];
+            
+            if (!file) return alert("Please select an image file.");
+            
+            btn.disabled = true;
+            btn.innerText = "UPLOADING IMAGE...";
+
+            try {
+                // 1. Upload to Firebase Storage
+                const storageRef = ref(storage, 'products/' + Date.now() + "_" + file.name);
+                await uploadBytes(storageRef, file);
+                const imageUrl = await getDownloadURL(storageRef);
+
+                // 2. Save to Firestore
+                await addDoc(collection(db, "products"), {
+                    name: document.getElementById('p-name').value,
+                    price: Number(document.getElementById('p-price').value),
+                    discount: Number(document.getElementById('p-discount').value) || null,
+                    stock: Number(document.getElementById('p-stock').value),
+                    image: imageUrl,
+                    createdAt: Date.now()
+                });
+
+                alert("Product Successfully Added!");
+                document.getElementById('product-form').reset();
+            } catch (err) {
+                console.error(err);
+                alert("Upload failed.");
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "UPLOAD & SAVE PRODUCT";
+            }
         };
 
-        function renderProducts() {
+        // --- RENDER SHOP & COUNT ---
+        onSnapshot(collection(db, "products"), (snap) => {
+            // Update Total Count
+            document.getElementById('inventory-count').innerText = snap.size;
+
             const list = document.getElementById('product-list');
-            onSnapshot(collection(db, "products"), (snap) => {
-                list.innerHTML = "";
-                snap.forEach(documentSnapshot => {
-                    const item = documentSnapshot.data();
-                    const id = documentSnapshot.id;
-                    list.innerHTML += `
-                        <div class="group relative">
-                            <div class="aspect-[3/4] bg-neutral-100 overflow-hidden mb-6">
-                                <img src="${item.image}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700">
-                            </div>
-                            <div class="flex justify-between items-start">
-                                <div>
-                                    <h4 class="text-[10px] font-bold uppercase tracking-widest">${item.name}</h4>
-                                    <p class="text-sm font-semibold">₦${item.price.toLocaleString()}</p>
-                                </div>
-                                ${auth.currentUser ? `<button onclick="window.del('${id}')" class="text-[9px] text-red-500 font-bold uppercase">Del</button>` : ''}
-                            </div>
+            list.innerHTML = "";
+            snap.forEach(d => {
+                const p = d.data();
+                const id = d.id;
+                const isOutOfStock = p.stock <= 0;
+                
+                list.innerHTML += `
+                    <div class="group relative ${isOutOfStock ? 'opacity-40' : ''}">
+                        <div class="aspect-[3/4] bg-neutral-100 overflow-hidden mb-6">
+                            <img src="${p.image}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-1000">
                         </div>
-                    `;
-                });
+                        <h4 class="text-[10px] font-bold uppercase tracking-widest">${p.name}</h4>
+                        <div class="flex space-x-2 items-center text-sm font-semibold py-1">
+                            ${p.discount ? `<span class="line-through text-gray-400">₦${p.price.toLocaleString()}</span><span>₦${p.discount.toLocaleString()}</span>` : `<span>₦${p.price.toLocaleString()}</span>`}
+                        </div>
+                        <p class="text-[9px] uppercase font-bold text-gray-400 mb-4">${isOutOfStock ? 'RESTOCKING SOON' : `${p.stock} UNITS REMAINING`}</p>
+                        ${!isOutOfStock ? `<button onclick="window.addToCart('${id}', '${p.name}', ${p.discount || p.price})" class="w-full border border-black py-3 text-[10px] font-bold hover:bg-black hover:text-white transition">ADD TO BAG</button>` : ''}
+                        ${auth.currentUser && auth.currentUser.email === ADMIN_EMAIL ? `<button onclick="window.del('${id}')" class="mt-2 text-[9px] text-red-500 underline font-bold uppercase block w-full text-center">Remove from Inventory</button>` : ''}
+                    </div>
+                `;
             });
+        });
+
+        // --- CART & CHECKOUT ---
+        window.addToCart = (id, name, price) => {
+            cart.push({ id, name, price });
+            updateCartUI();
+        };
+
+        function updateCartUI() {
+            document.getElementById('cart-count').innerText = cart.length;
+            const items = document.getElementById('cart-items');
+            items.innerHTML = "";
+            let total = 0;
+            cart.forEach(item => {
+                total += item.price;
+                items.innerHTML += `<div class="flex justify-between text-xs uppercase py-2 border-b border-gray-100"><span>${item.name}</span><span>₦${item.price.toLocaleString()}</span></div>`;
+            });
+            document.getElementById('cart-total').innerText = `₦${total.toLocaleString()}`;
         }
-        window.del = (id) => confirm("Remove item?") && deleteDoc(doc(db, "products", id));
-        renderProducts();
+
+        document.getElementById('place-order-btn').onclick = async () => {
+            if (cart.length === 0) return;
+            for (const item of cart) {
+                await updateDoc(doc(db, "products", item.id), { stock: increment(-1) });
+            }
+            alert("Order Confirmed!");
+            cart = [];
+            updateCartUI();
+            showView('home');
+        };
+
+        window.del = (id) => confirm("Delete product?") && deleteDoc(doc(db, "products", id));
     </script>
 </body>
 </html>
