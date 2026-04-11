@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bright Label Boutique | Premium Fashion</title>
+    <title>Bright Label Boutique | Secure Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
@@ -60,29 +60,28 @@
                 <span>Total</span>
                 <span id="cart-total">₦0</span>
             </div>
-            <button id="place-order-btn" class="w-full bg-black text-white py-5 text-[10px] font-bold uppercase tracking-[0.4em]">Complete Purchase</button>
+            <button id="place-order-btn" class="w-full bg-black text-white py-5 text-[10px] font-bold uppercase tracking-[0.3em]">Complete Purchase</button>
         </section>
 
         <section id="admin-view" class="view max-w-2xl mx-auto px-6 py-24">
             <div id="admin-auth-box" class="bg-white border p-10 shadow-2xl space-y-8">
-                <h3 id="auth-title" class="text-center text-xl font-bold uppercase tracking-[0.3em]">Boutique Access</h3>
+                <h3 class="text-center text-xl font-bold uppercase tracking-[0.3em]">Boutique Access</h3>
                 
                 <form id="auth-form" class="space-y-6">
-                    <input type="email" id="adm-email" placeholder="EMAIL" class="w-full border-b py-3 text-xs outline-none focus:border-black uppercase" required>
+                    <input type="email" id="adm-email" placeholder="ADMIN EMAIL" class="w-full border-b py-3 text-xs outline-none focus:border-black uppercase" required>
                     <input type="password" id="adm-pass" placeholder="PASSWORD" class="w-full border-b py-3 text-xs outline-none focus:border-black uppercase" required>
                     <button type="submit" id="auth-btn" class="w-full bg-black text-white py-4 text-[10px] font-bold tracking-widest">LOGIN</button>
                 </form>
 
-                <div class="text-center space-y-4">
-                    <button id="toggle-auth" class="text-[9px] uppercase tracking-widest font-bold underline decoration-2">Create New Admin Account</button>
-                    <button id="forgot-password" class="block w-full text-[9px] uppercase tracking-widest text-gray-400">Forgot Password?</button>
+                <div class="text-center">
+                    <button id="forgot-password" class="text-[9px] uppercase tracking-widest text-gray-400 font-bold">Forgot Password?</button>
                 </div>
             </div>
 
             <div id="admin-dashboard" class="hidden space-y-10">
                 <div class="grid grid-cols-2 gap-6 items-center border-b pb-8">
                     <div class="bg-gray-50 p-6 border border-gray-100">
-                        <p class="text-[10px] uppercase text-gray-400 font-bold mb-1">Total Items</p>
+                        <p class="text-[10px] uppercase text-gray-400 font-bold mb-1">Total Items In Store</p>
                         <h4 id="inventory-count" class="text-4xl font-bold italic">0</h4>
                     </div>
                     <div class="text-right">
@@ -91,7 +90,7 @@
                 </div>
 
                 <form id="product-form" class="space-y-6 bg-white p-8 border">
-                    <h4 class="text-xs font-bold uppercase tracking-widest underline decoration-black mb-4">Add To Collection</h4>
+                    <h4 class="text-xs font-bold uppercase tracking-widest underline decoration-black mb-4">Add To Inventory</h4>
                     <input type="text" id="p-name" placeholder="PRODUCT NAME" class="w-full border-b py-2 text-xs outline-none focus:border-black uppercase" required>
                     <div class="grid grid-cols-2 gap-4">
                         <input type="number" id="p-price" placeholder="ORIGINAL PRICE (₦)" class="w-full border-b py-2 text-xs outline-none focus:border-black" required>
@@ -100,12 +99,12 @@
                     <input type="number" id="p-stock" placeholder="QUANTITY IN STOCK" class="w-full border-b py-2 text-xs outline-none focus:border-black" required>
                     
                     <div class="space-y-2">
-                        <label class="block text-[10px] text-gray-400 font-bold uppercase">Upload Image</label>
+                        <label class="block text-[10px] text-gray-400 font-bold uppercase">Upload Product Photo</label>
                         <input type="file" id="p-file" class="text-xs w-full file:bg-black file:text-white file:border-none file:px-4 file:py-2 file:text-[10px] file:uppercase file:font-bold" accept="image/*">
                     </div>
 
                     <button type="submit" id="submit-btn" class="w-full bg-black text-white py-5 text-[10px] font-bold uppercase tracking-widest transition hover:bg-zinc-800">
-                        Save to Storefront
+                        Upload & List Product
                     </button>
                 </form>
             </div>
@@ -115,7 +114,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
         import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification, sendPasswordResetEmail, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-storage.js";
 
         const firebaseConfig = {
@@ -132,10 +131,10 @@
         const auth = getAuth(app);
         const storage = getStorage(app);
 
-        // CONFIG: UPDATE THIS TO YOUR EMAIL
+        // --- IMPORTANT: ENTER YOUR AUTHORIZED EMAIL HERE ---
         const ADMIN_EMAIL = "your-email@gmail.com"; 
+        
         let cart = [];
-        let isLoginMode = true;
 
         // --- NAVIGATION ---
         window.showView = (name) => {
@@ -146,36 +145,26 @@
         };
         document.getElementById('menu-btn').onclick = () => document.getElementById('mobile-menu').classList.toggle('hidden');
 
-        // --- AUTH LOGIC (EMAIL/PASS ONLY) ---
-        document.getElementById('toggle-auth').onclick = () => {
-            isLoginMode = !isLoginMode;
-            document.getElementById('auth-title').innerText = isLoginMode ? "Boutique Access" : "Create Admin";
-            document.getElementById('auth-btn').innerText = isLoginMode ? "LOGIN" : "REGISTER";
-            document.getElementById('toggle-auth').innerText = isLoginMode ? "Create New Admin Account" : "Back to Login";
-        };
-
+        // --- SECURE AUTH: LOGIN ONLY ---
         document.getElementById('auth-form').onsubmit = async (e) => {
             e.preventDefault();
             const email = document.getElementById('adm-email').value;
             const pass = document.getElementById('adm-pass').value;
 
             try {
-                if (isLoginMode) {
-                    const userCred = await signInWithEmailAndPassword(auth, email, pass);
-                    if (!userCred.user.emailVerified) {
-                        alert("Account not verified. Please check your email.");
-                        await signOut(auth);
-                    }
-                } else {
-                    const userCred = await createUserWithEmailAndPassword(auth, email, pass);
-                    await sendEmailVerification(userCred.user);
-                    alert("Account created. Verify your email to login!");
-                    document.getElementById('toggle-auth').click();
+                const userCred = await signInWithEmailAndPassword(auth, email, pass);
+                if (userCred.user.email !== ADMIN_EMAIL) {
+                    alert("Unauthorized Access Attempt.");
+                    await signOut(auth);
+                } else if (!userCred.user.emailVerified) {
+                    alert("Please verify your email address to log in.");
+                    await signOut(auth);
                 }
-            } catch (err) { alert(err.message); }
+            } catch (err) { alert("Invalid Credentials."); }
         };
 
         onAuthStateChanged(auth, (user) => {
+            // Dashboard only appears if email is YOUR email and it is VERIFIED
             const isAdmin = user && user.email === ADMIN_EMAIL && user.emailVerified;
             document.getElementById('admin-auth-box').classList.toggle('hidden', isAdmin);
             document.getElementById('admin-dashboard').classList.toggle('hidden', !isAdmin);
@@ -184,12 +173,12 @@
         document.getElementById('forgot-password').onclick = async () => {
             const email = document.getElementById('adm-email').value;
             if (email) { await sendPasswordResetEmail(auth, email); alert("Reset link sent!"); }
-            else alert("Enter email first.");
+            else alert("Enter email address.");
         };
 
         document.getElementById('logout-btn').onclick = () => signOut(auth);
 
-        // --- DATABASE & STORAGE LOGIC ---
+        // --- STORAGE & PRODUCT LOGIC ---
         document.getElementById('product-form').onsubmit = async (e) => {
             e.preventDefault();
             const file = document.getElementById('p-file').files[0];
@@ -212,9 +201,9 @@
                     date: Date.now()
                 });
                 document.getElementById('product-form').reset();
-                alert("Collection Updated.");
-            } catch (err) { alert("Error uploading."); }
-            finally { btn.disabled = false; btn.innerText = "Save to Storefront"; }
+                alert("Inventory Updated.");
+            } catch (err) { alert("Upload error."); }
+            finally { btn.disabled = false; btn.innerText = "Upload & List Product"; }
         };
 
         onSnapshot(collection(db, "products"), (snap) => {
@@ -226,23 +215,23 @@
                 const id = d.id;
                 const isOut = p.stock <= 0;
                 list.innerHTML += `
-                    <div class="group relative ${isOut ? 'opacity-30' : 'animate-fadeIn'}">
-                        <div class="aspect-[3/4] bg-neutral-100 overflow-hidden mb-6">
-                            <img src="${p.image}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-1000 group-hover:scale-110">
+                    <div class="group relative ${isOut ? 'opacity-40' : ''}">
+                        <div class="aspect-[3/4] bg-stone-100 overflow-hidden mb-6">
+                            <img src="${p.image}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-700">
                         </div>
                         <h4 class="text-[10px] font-bold uppercase tracking-widest">${p.name}</h4>
                         <div class="flex space-x-2 text-sm font-semibold py-1">
                             ${p.discount ? `<span class="line-through text-gray-400 font-light">₦${p.price.toLocaleString()}</span><span>₦${p.discount.toLocaleString()}</span>` : `<span>₦${p.price.toLocaleString()}</span>`}
                         </div>
-                        <p class="text-[9px] uppercase text-gray-400 font-bold mb-4">${isOut ? 'SOLD OUT' : `${p.stock} UNITS LEFT`}</p>
+                        <p class="text-[9px] uppercase text-gray-400 font-bold mb-4">${isOut ? 'OUT OF STOCK' : `${p.stock} REMAINING`}</p>
                         ${!isOut ? `<button onclick="window.addToBag('${id}', '${p.name}', ${p.discount || p.price})" class="w-full border border-black py-3 text-[10px] font-bold hover:bg-black hover:text-white transition">ADD TO BAG</button>` : ''}
-                        ${auth.currentUser && auth.currentUser.email === ADMIN_EMAIL ? `<button onclick="window.del('${id}')" class="text-[8px] text-red-500 block w-full mt-2 font-bold uppercase">Remove Item</button>` : ''}
+                        ${auth.currentUser && auth.currentUser.email === ADMIN_EMAIL ? `<button onclick="window.del('${id}')" class="text-[8px] text-red-500 font-bold block w-full mt-2 uppercase underline">Delete From Inventory</button>` : ''}
                     </div>
                 `;
             });
         });
 
-        // --- CART SYSTEM ---
+        // --- CART LOGIC ---
         window.addToBag = (id, name, price) => { cart.push({ id, name, price }); updateCartUI(); };
         function updateCartUI() {
             document.getElementById('cart-count').innerText = cart.length;
@@ -263,7 +252,8 @@
             alert("Order Success!"); cart = []; updateCartUI(); showView('home');
         };
 
-        window.del = (id) => confirm("Delete product?") && deleteDoc(doc(db, "products", id));
+        window.del = (id) => confirm("Permanently remove?") && deleteDoc(doc(db, "products", id));
     </script>
 </body>
 </html>
+
