@@ -139,7 +139,7 @@
             const pass = document.getElementById('adm-pass').value;
             try {
                 const userCred = await signInWithEmailAndPassword(auth, email, pass);
-                if (userCred.user.email !== ADMIN_EMAIL || !userCred.user.emailVerified) {
+                if (userCred.user.email !== ADMIN_EMAIL || ) {
                     alert("Unauthorized access."); await signOut(auth);
                 }
             } catch (err) { alert("Invalid credentials."); }
