@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bright label // boutique</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap');
+        body { font-family: 'Space Grotesk', sans-serif; background-color: #0a0a0a; color: #f5f5f5; }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .page { display: none; }
+        .page.active { display: block; animation: slideUp 0.4s ease-out; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <nav class="fixed top-0 w-full z-50 glass py-4 px-6 flex justify-between items-center">
+        <h1 class="text-xl font-bold tracking-tighter cursor-pointer" onclick="nav('home')">bright label.</h1>
+        <div class="flex gap-8 text-[10px] uppercase tracking-[0.2em] font-medium">
+            <button onclick="nav('shop')" class="hover:text-gray-400 transition">shop</button>
+            <button onclick="nav('admin')" class="hover:text-gray-400 transition">admin</button>
+            <button onclick="nav('bag')" class="bg-white text-black px-4 py-1 rounded-full">bag (<span id="count">0</span>)</button>
+        </div>
+    </nav>
+
+    <main class="pt-24 pb-20">
+        <section id="home" class="page active px-6">
+            <div class="h-[70vh] flex flex-col justify-center items-start">
+                <span class="text-xs uppercase tracking-[0.5em] text-gray-500 mb-4">collection 2026</span>
+                <h2 class="text-6xl md:text-8xl font-bold tracking-tighter mb-8">redefine<br>your style.</h2>
+                <button onclick="nav('shop')" class="bg-white text-black px-10 py-4 rounded-full text-xs font-bold uppercase tracking-widest hover:scale-105 transition">explore now</button>
+            </div>
+        </section>
+
+        <section id="shop" class="page px-6">
+            <div class="flex justify-between items-end mb-12">
+                <h3 class="text-4xl font-bold tracking-tighter">available pieces</h3>
+                <span class="text-xs text-gray-500 italic">ado ekiti, ng</span>
+            </div>
+            <div id="display" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                </div>
+        </section>
+
+        <section id="bag" class="page max-w-2xl mx-auto px-6">
+            <h3 class="text-3xl font-bold mb-10 tracking-tighter">your bag</h3>
+            <div id="bag-list" class="space-y-4 mb-8"></div>
+            <div class="glass p-8 rounded-3xl">
+                <div class="flex justify-between mb-6 text-xl font-bold">
+                    <span>total</span>
+                    <span id="total">₦0</span>
+                </div>
+                <button id="checkout-btn" class="w-full bg-white text-black py-4 rounded-full font-bold uppercase text-xs tracking-widest">complete checkout</button>
+            </div>
+        </section>
+
+        <section id="admin" class="page max-w-md mx-auto px-6">
+            <div id="login-zone" class="glass p-10 rounded-[3rem]">
+                <h3 class="text-2xl font-bold mb-6 tracking-tighter">vault access</h3>
+                <form id="login-form" class="space-y-4">
+                    <input type="email" id="email" placeholder="email" class="w-full bg-transparent border-b border-gray-800 py-3 text-sm outline-none focus:border-white transition" required>
+                    <input type="password" id="pass" placeholder="password" class="w-full bg-transparent border-b border-gray-800 py-3 text-sm outline-none focus:border-white transition" required>
+                    <button type="submit" class="w-full bg-white text-black py-4 rounded-full text-xs font-bold uppercase tracking-widest mt-6">unlock</button>
+                </form>
+            </div>
+
+            <div id="dash" class="hidden space-y-8">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-2xl font-bold tracking-tighter">manager</h3>
+                    <button onclick="logout()" class="text-[10px] uppercase border border-gray-800 px-4 py-2 rounded-full">exit</button>
+                </div>
+                <form id="add-form" class="glass p-8 rounded-[2rem] space-y-4">
+                    <input type="text" id="p-name" placeholder="item name" class="w-full bg-transparent border-b border-gray-800 py-2 text-sm outline-none" required>
+                    <div class="flex gap-4">
+                        <input type="number" id="p-price" placeholder="price" class="w-full bg-transparent border-b border-gray-800 py-2 text-sm outline-none" required>
+                        <input type="number" id="p-stock" placeholder="qty" class="w-full bg-transparent border-b border-gray-800 py-2 text-sm outline-none" required>
+                    </div>
+                    <input type="file" id="p-file" class="text-[10px] text-gray-500 py-4" required>
+                    <button type="submit" id="up-btn" class="w-full bg-white text-black py-4 rounded-2xl text-xs font-bold uppercase">upload piece</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-storage.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBzVQi7NmFPJA44ulxtIJujA4fn2Hc7qLA",
+            authDomain: "bright-label.firebaseapp.com",
+            projectId: "bright-label",
+            storageBucket: "bright-label.firebasestorage.app",
+            messagingSenderId: "1008754785320",
+            appId: "1:1008754785320:web:988554796007d853b6891d"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        const storage = getStorage(app);
+
+        // --- set your email here ---
+        const ADMIN_EMAIL = "brightcodek@gmail.com"; 
+
+        window.nav = (id) => {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            window.scrollTo(0,0);
+        };
+
+        // auth logic
+        document.getElementById('login-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value.toLowerCase();
+            const pass = document.getElementById('pass').value;
+            try {
+                const cred = await signInWithEmailAndPassword(auth, email, pass);
+                if (cred.user.email !== ADMIN_EMAIL) { alert("access denied."); await signOut(auth); }
+            } catch (err) { alert("error: " + err.message); }
+        };
+
+        onAuthStateChanged(auth, (u) => {
+            const isMe = u && u.email === ADMIN_EMAIL;
+            document.getElementById('login-zone').style.display = isMe ? 'none' : 'block';
+            document.getElementById('dash').style.display = isMe ? 'block' : 'none';
+        });
+
+        window.logout = () => signOut(auth);
+
+        // storage logic
+        document.getElementById('add-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('up-btn');
+            const file = document.getElementById('p-file').files[0];
+            btn.innerText = "syncing...";
+            try {
+                const sRef = ref(storage, `boutique/${Date.now()}`);
+                await uploadBytes(sRef, file);
+                const url = await getDownloadURL(sRef);
+                await addDoc(collection(db, "products"), {
+                    name: document.getElementById('p-name').value,
+                    price: Number(document.getElementById('p-price').value),
+                    stock: Number(document.getElementById('p-stock').value),
+                    img: url
+                });
+                document.getElementById('add-form').reset();
+            } catch (err) { alert(err.message); }
+            finally { btn.innerText = "upload piece"; }
+        };
+
+        // load items
+        onSnapshot(collection(db, "products"), (snap) => {
+            const div = document.getElementById('display');
+            div.innerHTML = "";
+            snap.forEach(d => {
+                const p = d.data();
+                const out = p.stock <= 0;
+                div.innerHTML += `
+                    <div class="glass p-4 rounded-[2rem] group ${out ? 'opacity-20' : ''}">
+                        <div class="overflow-hidden rounded-2xl mb-4 h-64">
+                            <img src="${p.img}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-700">
+                        </div>
+                        <h4 class="font-bold text-sm">${p.name}</h4>
+                        <div class="flex justify-between items-center mt-2">
+                            <span class="text-xl font-bold">₦${p.price.toLocaleString()}</span>
+                            ${!out ? `<button onclick="addToBag('${d.id}', '${p.name}', ${p.price})" class="bg-white text-black text-[10px] font-bold px-4 py-2 rounded-full">add</button>` : '<span class="text-[10px] text-red-500 uppercase font-bold">sold</span>'}
+                        </div>
+                        ${auth.currentUser ? `<button onclick="del('${d.id}')" class="text-red-900 text-[8px] mt-4 block underline">remove permanently</button>` : ''}
+                    </div>
+                `;
+            });
+        });
+
+        // bag logic
+        let cart = [];
+        window.addToBag = (id, name, price) => {
+            cart.push({ id, name, price });
+            updateUI();
+        };
+
+        function updateUI() {
+            document.getElementById('count').innerText = cart.length;
+            const list = document.getElementById('bag-list');
+            list.innerHTML = "";
+            let sum = 0;
+            cart.forEach(i => {
+                sum += i.price;
+                list.innerHTML += `<div class="flex justify-between text-sm py-2 border-b border-gray-900"><span>${i.name}</span><span>₦${i.price.toLocaleString()}</span></div>`;
+            });
+            document.getElementById('total').innerText = `₦${sum.toLocaleString()}`;
+        }
+
+        document.getElementById('checkout-btn').onclick = async () => {
+            if (cart.length === 0) return;
+            for (let i of cart) { await updateDoc(doc(db, "products", i.id), { stock: increment(-1) }); }
+            alert("purchase successful.");
+            cart = []; updateUI(); nav('home');
+        };
+
+        window.del = (id) => confirm("permanently delete?") && deleteDoc(doc(db, "products", id));
+    </script>
+</body>
+</html>
