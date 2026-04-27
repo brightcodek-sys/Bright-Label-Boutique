@@ -2,119 +2,91 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Bright Label | Boutique</title>
-    
-    <link rel="manifest" href="manifest.json">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3050/3050212.png">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bright Label | Hybrid</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;700&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
         .page-section { display: none; }
-        .page-section.active { display: block; animation: fadeIn 0.4s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .glass { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); }
+        .page-section.active { display: block; }
     </style>
 </head>
-<body class="bg-white text-zinc-900 select-none">
+<body class="bg-white text-zinc-900">
 
-    <nav class="glass border-b border-zinc-100 sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto px-6 py-5 flex justify-between items-center">
-            <h1 class="text-xl font-bold tracking-tighter cursor-pointer" onclick="showPage('shop')">bright label.</h1>
-            <div class="flex items-center gap-4">
-                <div class="hidden md:flex space-x-6 text-[10px] font-bold uppercase tracking-widest">
-                    <button onclick="showPage('shop')">Shop</button>
-                    <button onclick="showPage('admin')">Admin</button>
-                </div>
-                <button onclick="showPage('bag')" class="bg-zinc-900 text-white px-4 py-2 rounded-full text-[10px] font-bold">
-                    BAG (<span id="bag-count">0</span>)
-                </button>
-            </div>
+    <nav class="border-b p-5 flex justify-between items-center sticky top-0 bg-white/80 backdrop-blur-md z-50">
+        <h1 class="text-xl font-bold tracking-tighter cursor-pointer" onclick="showPage('shop')">bright label.</h1>
+        <div class="flex gap-4 text-[10px] font-bold uppercase tracking-widest">
+            <button onclick="showPage('shop')">Shop</button>
+            <button onclick="showPage('admin')">Admin</button>
         </div>
     </nav>
 
-    <main>
-        <section id="shop" class="page-section active max-w-6xl mx-auto px-6 py-12">
-            <div id="product-grid" class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                </div>
-        </section>
+    <section id="admin" class="page-section max-w-md mx-auto p-6 mt-10">
+        <h3 class="font-bold mb-4 italic">Backstage Manager</h3>
+        <form id="add-item-form" class="bg-zinc-50 p-6 rounded-3xl border space-y-4">
+            <input type="text" id="p-name" placeholder="Item Name" class="w-full bg-transparent border-b py-2 outline-none" required>
+            <input type="number" id="p-price" placeholder="Price (₦)" class="w-full bg-transparent border-b py-2 outline-none" required>
+            <input type="number" id="p-stock" placeholder="Stock Quantity" class="w-full bg-transparent border-b py-2 outline-none" required>
+            <input type="file" id="p-file" class="text-[10px]" required>
+            <button type="submit" id="up-btn" class="w-full bg-black text-white py-4 rounded-xl font-bold uppercase text-[10px]">Sync to Cloud</button>
+        </form>
+    </section>
 
-        <section id="bag" class="page-section max-w-xl mx-auto px-6 py-12">
-            <h3 class="text-3xl font-bold mb-8 italic">Your Selection</h3>
-            <div id="bag-items" class="space-y-4 mb-10"></div>
-            <div class="border-t-2 border-zinc-900 pt-6 flex justify-between items-center mb-10">
-                <span class="font-bold text-xs uppercase tracking-widest">Total</span>
-                <span id="bag-total" class="text-2xl font-bold">₦0</span>
-            </div>
-            <button id="checkout-btn" class="w-full bg-zinc-900 text-white py-6 rounded-2xl font-bold uppercase text-xs tracking-widest">Complete Order</button>
-        </section>
-
-        <section id="admin" class="page-section max-w-md mx-auto px-6 py-12">
-            <h3 class="text-xl font-bold mb-6">Inventory Manager</h3>
-            <form id="add-item-form" class="bg-zinc-50 p-6 rounded-3xl border border-zinc-200 space-y-4">
-                <input type="text" id="p-name" placeholder="item name" class="w-full bg-transparent border-b py-2 outline-none text-sm" required>
-                <div class="flex gap-4">
-                    <input type="number" id="p-price" placeholder="price" class="w-full bg-transparent border-b py-2 outline-none text-sm" required>
-                    <input type="number" id="p-stock" placeholder="qty" class="w-full bg-transparent border-b py-2 outline-none text-sm" required>
-                </div>
-                <input type="file" id="p-file" class="text-[10px] py-2" required>
-                <button type="submit" id="up-btn" class="w-full bg-zinc-900 text-white py-4 rounded-xl font-bold uppercase text-[10px]">Sync to Shop</button>
-            </form>
-        </section>
-    </main>
+    <section id="shop" class="page-section active max-w-6xl mx-auto p-6">
+        <div id="product-grid" class="grid grid-cols-2 md:grid-cols-4 gap-6"></div>
+    </section>
 
     <script type="module">
-        // Firebase Imports
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, increment, deleteDoc } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
 
         // 1. CONFIGURATION
         const firebaseConfig = {
             apiKey: "AIzaSyBzVQi7NmFPJA44ulxtIJujA4fn2Hc7qLA",
             authDomain: "bright-label.firebaseapp.com",
             projectId: "bright-label",
+            storageBucket: "bright-label.firebasestorage.app",
             messagingSenderId: "1008754785320",
             appId: "1:1008754785320:web:988554796007d853b6891d"
         };
 
         const SUPABASE_URL = 'https://rtmqrcpsdvzbbaktcemr.supabase.co';
-        const SUPABASE_KEY = 'Sb_publishable_gbwwAN9xMVdLEA68dwILpA_UDro6SO2';
+        // USE THE LONG ANON KEY (Starts with eyJ)
+        const SUPABASE_KEY = 'EYJ_LONG_ANON_KEY_FROM_DASHBOARD'; 
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // Page Switcher
         window.showPage = (id) => {
             document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
         };
 
-        // 2. HYBRID UPLOAD (Supabase Storage -> Firebase Firestore)
+        // 2. THE SYNC LOGIC
         document.getElementById('add-item-form').onsubmit = async (e) => {
             e.preventDefault();
             const btn = document.getElementById('up-btn');
             const file = document.getElementById('p-file').files[0];
-            btn.innerText = "Syncing..."; btn.disabled = true;
+            btn.innerText = "Uploading Image..."; btn.disabled = true;
 
             try {
+                // A. Upload to Supabase Storage
                 const fileName = `boutique/${Date.now()}_${file.name}`;
-                const { data, error } = await supabaseClient.storage
+                const { data, error } = await _supabase.storage
                     .from('boutique-images')
                     .upload(fileName, file);
 
                 if (error) throw error;
 
-                const { data: { publicUrl } } = supabaseClient.storage
+                // Get the link for the photo
+                const { data: { publicUrl } } = _supabase.storage
                     .from('boutique-images')
                     .getPublicUrl(fileName);
 
+                // B. Save text details to Firebase
                 await addDoc(collection(db, "products"), {
                     name: document.getElementById('p-name').value,
                     price: Number(document.getElementById('p-price').value),
@@ -123,63 +95,32 @@
                     createdAt: new Date()
                 });
 
-                alert("Luxury Added!");
+                alert("Luxury Synced Successfully!");
                 document.getElementById('add-item-form').reset();
-            } catch (err) { alert("Error: " + err.message); }
-            finally { btn.innerText = "Sync to Shop"; btn.disabled = false; }
+                showPage('shop');
+            } catch (err) {
+                alert("Error: " + err.message);
+            } finally {
+                btn.innerText = "Sync to Cloud"; btn.disabled = false;
+            }
         };
 
-        // 3. REAL-TIME DATA FEED
+        // 3. LISTEN FOR UPDATES
         onSnapshot(collection(db, "products"), (snap) => {
             const grid = document.getElementById('product-grid');
             grid.innerHTML = "";
-            snap.forEach(d => {
-                const p = d.data();
-                const isOut = p.stock <= 0;
+            snap.forEach(doc => {
+                const p = doc.data();
                 grid.innerHTML += `
                     <div class="group">
-                        <div class="aspect-[3/4] bg-zinc-100 rounded-3xl overflow-hidden mb-4 relative">
-                            <img src="${p.image}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                            ${isOut ? '<div class="absolute inset-0 bg-white/60 flex items-center justify-center font-bold uppercase text-[10px]">Sold Out</div>' : ''}
+                        <div class="aspect-[3/4] bg-zinc-100 rounded-2xl overflow-hidden mb-3">
+                            <img src="${p.image}" class="w-full h-full object-cover">
                         </div>
-                        <h4 class="text-[10px] font-bold uppercase text-zinc-400 mb-1">${p.name}</h4>
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm font-bold tracking-tighter">₦${p.price.toLocaleString()}</span>
-                            ${!isOut ? `<button onclick="addToBag('${d.id}', '${p.name}', ${p.price})" class="bg-zinc-900 text-white text-[8px] px-4 py-1 rounded-full uppercase font-bold">Add</button>` : ''}
-                        </div>
-                        <button onclick="delProduct('${d.id}')" class="text-red-400 text-[8px] mt-2 uppercase font-bold">Remove</button>
+                        <h4 class="text-[10px] font-bold uppercase text-zinc-400">${p.name}</h4>
+                        <span class="text-sm font-bold">₦${p.price.toLocaleString()}</span>
                     </div>`;
             });
         });
-
-        // 4. BAG SYSTEM
-        let bag = [];
-        window.addToBag = (id, name, price) => { bag.push({ id, name, price }); updateBagUI(); };
-        function updateBagUI() {
-            document.getElementById('bag-count').innerText = bag.length;
-            const list = document.getElementById('bag-items');
-            list.innerHTML = ""; let total = 0;
-            bag.forEach(item => {
-                total += item.price;
-                list.innerHTML += `<div class="flex justify-between py-2 border-b text-[11px] font-bold uppercase"><span>${item.name}</span><span>₦${item.price.toLocaleString()}</span></div>`;
-            });
-            document.getElementById('bag-total').innerText = `₦${total.toLocaleString()}`;
-        }
-
-        document.getElementById('checkout-btn').onclick = async () => {
-            if (bag.length === 0) return;
-            for (let item of bag) {
-                await updateDoc(doc(db, "products", item.id), { stock: increment(-1) });
-            }
-            alert("Order Success!"); bag = []; updateBagUI(); showPage('shop');
-        };
-
-        window.delProduct = (id) => confirm("Delete?") && deleteDoc(doc(db, "products", id));
-
-        // PWA Activation
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js').then(() => console.log("PWA Active"));
-        }
     </script>
 </body>
 </html>
