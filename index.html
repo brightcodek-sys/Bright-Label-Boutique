@@ -7,7 +7,6 @@
     
     <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -17,7 +16,7 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
         .page-section { display: none; }
         .page-section.active { display: block; animation: fadeIn 0.4s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body class="bg-white text-zinc-900">
@@ -36,23 +35,26 @@
     </nav>
 
     <main class="max-w-6xl mx-auto px-6 py-12">
+        
         <section id="shop" class="page-section active">
             <div id="product-grid" class="grid grid-cols-2 md:grid-cols-4 gap-8">
                 </div>
         </section>
 
-        <section id="bag" class="page-section max-w-md mx-auto">
-            <h2 class="text-2xl font-bold mb-6 italic">Your Selection</h2>
-            <div id="bag-items" class="space-y-4 mb-6"></div>
-            <div class="border-t pt-4 flex justify-between font-bold mb-8 text-lg">
-                <span>Total</span>
-                <span id="bag-total">₦0</span>
+        <section id="login" class="page-section max-w-md mx-auto">
+            <h3 class="text-xl font-bold mb-6 italic text-center text-zinc-400">Staff Entrance</h3>
+            <div class="bg-zinc-50 p-8 rounded-3xl border border-zinc-100 space-y-5">
+                <input type="email" id="admin-email" placeholder="Email" class="w-full bg-transparent border-b py-2 outline-none text-sm">
+                <input type="password" id="admin-pass" placeholder="Password" class="w-full bg-transparent border-b py-2 outline-none text-sm">
+                <button id="login-btn" class="w-full bg-zinc-900 text-white py-4 rounded-xl font-bold uppercase text-[10px] tracking-widest">Verify Identity</button>
             </div>
-            <button id="checkout-btn" class="w-full bg-zinc-900 text-white py-4 rounded-2xl font-bold uppercase text-[10px] tracking-widest">Complete Order</button>
         </section>
 
         <section id="admin" class="page-section max-w-md mx-auto">
-            <h3 class="text-lg font-bold mb-6">Inventory Manager</h3>
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-bold">Inventory Manager</h3>
+                <button id="logout-btn" class="text-[8px] border px-2 py-1 rounded uppercase font-bold text-zinc-400">Logout</button>
+            </div>
             <form id="add-item-form" class="bg-zinc-50 p-8 rounded-3xl border border-zinc-100 space-y-5">
                 <input type="text" id="p-name" placeholder="Item Name" class="w-full bg-transparent border-b py-2 outline-none text-sm" required>
                 <div class="flex gap-4">
@@ -63,13 +65,25 @@
                 <button type="submit" id="up-btn" class="w-full bg-zinc-900 text-white py-4 rounded-xl font-bold uppercase text-[10px]">Sync to Cloud</button>
             </form>
         </section>
+
+        <section id="bag" class="page-section max-w-md mx-auto">
+            <h2 class="text-2xl font-bold mb-6 italic">Bag</h2>
+            <div id="bag-items" class="space-y-4 mb-6"></div>
+            <div class="border-t pt-4 flex justify-between font-bold mb-8">
+                <span>Total</span>
+                <span id="bag-total">₦0</span>
+            </div>
+            <button id="checkout-btn" class="w-full bg-zinc-900 text-white py-4 rounded-2xl font-bold uppercase text-[10px]">Checkout</button>
+        </section>
+
     </main>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
         import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
 
-        // 1. CONFIGURATION
+        // CONFIGURATIONS
         const firebaseConfig = {
             apiKey: "AIzaSyBzVQi7NmFPJA44ulxtIJujA4fn2Hc7qLA",
             authDomain: "bright-label.firebaseapp.com",
@@ -80,36 +94,49 @@
         };
 
         const SUPABASE_URL = 'https://rtmqrcpsdvzbbaktcemr.supabase.co';
-        // Using your verified Anon Key
         const SUPABASE_KEY = 'EyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ0bXFyY3BzZHZ6YmJha3RjZW1yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyNzA4NjEsImV4cCI6MjA5Mjg0Njg2MX0.eBvBxTLrJgmeu_hvJN-aGoEWLXC-bQ5VxL5Y2U-H-xA';
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        const auth = getAuth(app);
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // Page Control
+        // PAGE NAVIGATION WITH AUTH CHECK
         window.showPage = (id) => {
+            if (id === 'admin' && !auth.currentUser) {
+                id = 'login'; // Show login instead of admin if not signed in
+            }
             document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
+            window.scrollTo(0,0);
         };
 
-        // 2. HYBRID SYNC (Storage: Supabase | Data: Firebase)
+        // LOGIN SYSTEM
+        document.getElementById('login-btn').onclick = async () => {
+            const email = document.getElementById('admin-email').value;
+            const pass = document.getElementById('admin-pass').value;
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+                showPage('admin');
+            } catch (err) { alert("Access Denied: Invalid Credentials"); }
+        };
+
+        document.getElementById('logout-btn').onclick = () => signOut(auth).then(() => showPage('shop'));
+
+        // SYNC LOGIC (Supabase Storage + Firebase Database)
         document.getElementById('add-item-form').onsubmit = async (e) => {
             e.preventDefault();
             const btn = document.getElementById('up-btn');
             const file = document.getElementById('p-file').files[0];
-            btn.innerText = "Syncing..."; btn.disabled = true;
+            btn.innerText = "Processing..."; btn.disabled = true;
 
             try {
-                // Upload image to Supabase
-                const fileName = `boutique/${Date.now()}_${file.name}`;
+                const fileName = `products/${Date.now()}_${file.name}`;
                 const { data, error } = await _supabase.storage.from('boutique-images').upload(fileName, file);
                 if (error) throw error;
 
-                // Get Public URL
                 const { data: { publicUrl } } = _supabase.storage.from('boutique-images').getPublicUrl(fileName);
 
-                // Save Metadata to Firebase
                 await addDoc(collection(db, "products"), {
                     name: document.getElementById('p-name').value,
                     price: Number(document.getElementById('p-price').value),
@@ -118,39 +145,36 @@
                     createdAt: new Date()
                 });
 
-                alert("Success! Item is live.");
+                alert("Product Synced!");
                 document.getElementById('add-item-form').reset();
                 showPage('shop');
-            } catch (err) {
-                alert("Error: " + err.message);
-            } finally {
-                btn.innerText = "Sync to Cloud"; btn.disabled = false;
-            }
+            } catch (err) { alert(err.message); }
+            finally { btn.innerText = "Sync to Cloud"; btn.disabled = false; }
         };
 
-        // 3. REAL-TIME GRID
+        // LOAD SHOP GRID
         onSnapshot(collection(db, "products"), (snap) => {
             const grid = document.getElementById('product-grid');
             grid.innerHTML = "";
             snap.forEach(d => {
                 const p = d.data();
-                const isOut = p.stock <= 0;
+                const out = p.stock <= 0;
                 grid.innerHTML += `
                     <div class="group">
                         <div class="aspect-[3/4] bg-zinc-100 rounded-3xl overflow-hidden mb-4 relative">
-                            <img src="${p.image}" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
-                            ${isOut ? '<div class="absolute inset-0 bg-white/60 flex items-center justify-center font-bold uppercase text-[8px]">Sold Out</div>' : ''}
+                            <img src="${p.image}" class="w-full h-full object-cover">
+                            ${out ? '<div class="absolute inset-0 bg-white/60 flex items-center justify-center font-bold text-[8px] uppercase">Sold Out</div>' : ''}
                         </div>
-                        <h4 class="text-[9px] font-bold uppercase text-zinc-400 tracking-widest mb-1">${p.name}</h4>
+                        <h4 class="text-[9px] font-bold uppercase text-zinc-400 mb-1">${p.name}</h4>
                         <div class="flex justify-between items-center">
-                            <span class="text-sm font-bold tracking-tighter">₦${p.price.toLocaleString()}</span>
-                            ${!isOut ? `<button onclick="addToBag('${d.id}', '${p.name}', ${p.price})" class="bg-zinc-900 text-white text-[8px] px-3 py-1 rounded-full font-bold uppercase">Add</button>` : ''}
+                            <span class="text-sm font-bold">₦${p.price.toLocaleString()}</span>
+                            ${!out ? `<button onclick="addToBag('${d.id}', '${p.name}', ${p.price})" class="bg-zinc-900 text-white text-[8px] px-3 py-1 rounded-full font-bold uppercase">Add</button>` : ''}
                         </div>
                     </div>`;
             });
         });
 
-        // 4. BAG SYSTEM
+        // BAG MANAGEMENT
         let bag = [];
         window.addToBag = (id, name, price) => {
             bag.push({ id, name, price });
@@ -168,25 +192,10 @@
             document.getElementById('bag-total').innerText = `₦${total.toLocaleString()}`;
         }
 
-        document.getElementById('checkout-btn').onclick = async () => {
-            if (bag.length === 0) return;
-            for (let item of bag) {
-                await updateDoc(doc(db, "products", item.id), { stock: increment(-1) });
-            }
-            alert("Order Confirmed!");
-            bag = []; updateBagUI(); showPage('shop');
-        };
-
-        // Service Worker
+        // PWA REGISTRATION
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js');
         }
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js')
-      .then(() => console.log("Bright Label App: Registered"))
-      .catch(err => console.log("Bright Label App: Error", err));
-}
-
     </script>
 </body>
 </html>
